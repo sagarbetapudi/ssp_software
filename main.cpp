@@ -1,4 +1,4 @@
-//code for the ESP32
+// ================= ESP32 FULL CODE (38-PIN SAFE) =================
 
 #include <Wire.h>
 #include <SPI.h>
@@ -14,22 +14,28 @@
 
 /* ================= PIN MAP ================= */
 
+// I2C
 #define SDA_PIN 21
 #define SCL_PIN 22
 
-#define ONE_WIRE_PIN 15
+// OneWire (DS18B20) — moved from GPIO15 (strap pin)
+#define ONE_WIRE_PIN 27
 
-#define NRF_CE  16
-#define NRF_CSN 17
+// nRF24L01
+#define NRF_CE   16
+#define NRF_CSN  17
 
-#define SPI_SCK  18
-#define SPI_MISO 19
-#define SPI_MOSI 23
+// SPI (VSPI)
+#define SPI_SCK   18
+#define SPI_MISO  19
+#define SPI_MOSI  23
 
-#define SD_CS 4
+// SD Card
+#define SD_CS 5   // safer than GPIO4
 
-#define LED_PIN    32
-#define BUZZER_PIN 33
+// Indicators
+#define LED_PIN     32
+#define BUZZER_PIN  33
 
 /* ================= OBJECTS ================= */
 
@@ -63,6 +69,7 @@ const unsigned long SENSOR_INTERVAL = 2000;
 
 void setup() {
   Serial.begin(115200);
+
   pinMode(LED_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
 }
@@ -163,9 +170,9 @@ void errorState() {
 void readBMP280() {
   Serial.print("BMP | T=");
   Serial.print(bmp.readTemperature());
-  Serial.print("C P=");
+  Serial.print(" C P=");
   Serial.print(bmp.readPressure() / 100.0);
-  Serial.println("hPa");
+  Serial.println(" hPa");
 }
 
 void readMPU6050() {
@@ -194,7 +201,7 @@ void readDS18B20() {
   ds18b20.requestTemperatures();
   Serial.print("DS18B20 | T=");
   Serial.print(ds18b20.getTempCByIndex(0));
-  Serial.println("C");
+  Serial.println(" C");
 }
 
 /* ================= UTIL ================= */
